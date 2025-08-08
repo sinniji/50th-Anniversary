@@ -59,72 +59,13 @@ function toggleLoading(isLoading) {
 }
 
 submitButton.addEventListener('click', async () => {
-  clearErrors();
-
-  let isValid = true;
-  const entries = [];
-
-  personRows.forEach((row, i) => {
-    const name = row.querySelector('.name-field').value.trim();
-    const hearingStatus = row.querySelector('.hearing-status-field').value;
-    const affiliation = row.querySelector('.affiliation-field').value;
-    const contact = row.querySelector('.contact-field').value.trim();
-    const errorEl = document.getElementById(`error-message-${i}`);
-
-    if (i === 0 && (!name || !contact)) {
-      errorEl.textContent = !name ? '氏名は必ず入力してください。' : 'Mailは必ず入力してください。';
-      errorEl.style.display = 'block';
-      row.querySelector('.name-field').classList.add('error');
-      row.querySelector('.contact-field').classList.add('error');
-      isValid = false;
-      return;
-    }
-
-    if (contact && !isHalfWidth(contact)) {
-      errorEl.textContent = 'Mailは半角で入力してください。';
-      errorEl.style.display = 'block';
-      row.querySelector('.contact-field').classList.add('error');
-      isValid = false;
-      return;
-    }
-
-    if (name) {
-      entries.push({ name, hearingStatus, affiliation, contact });
-    }
-  });
-
-  if (!isValid) return;
-
-  const formData = {
-    entries,
-    comments: document.getElementById('additionalComments').value,
-    totalTickets: totalTicketsSpan.textContent
-  };
-
-  toggleLoading(true);
-
-  try {
-    const response = await fetch(gasApiUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-      mode: 'cors'
-    });
-
-    const result = await response.json();
-
-    if (result.success) {
-      alert('送信が完了しました。');
-      document.getElementById('anniversaryForm').reset();
-      calculateTotalTickets();
-    } else {
-      alert('送信中にエラーが発生しました: ' + result.message);
-    }
-  } catch (error) {
-    alert('送信中にエラーが発生しました: ' + error.message);
-  } finally {
-    toggleLoading(false);
-  }
+fetch('https://script.google.com/macros/s/AKfycbyOGC00pgRKzD6G6CktIViHuo8_JgNVPexglgITrQMU1KGuVmXuf4xgOr2zjSqjmdsF/exec', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ test: true }),
+  mode: 'cors'
+})
+.then(res => res.json())
+.then(data => console.log(data))
+.catch(err => console.error('送信失敗:', err));
 });
