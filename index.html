@@ -1,3 +1,26 @@
+
+githubとGASで連携してfetchでpagesからデータをGASに送りたい。
+コード.gs
+function doGet(e) {
+  var name = e.parameter.name || 'ゲスト';
+  return ContentService.createTextOutput('こんにちは、' + name + 'さん！ (GET)');
+}
+
+function doPost(e) {
+  var data = JSON.parse(e.postData.contents);
+  var name = data.name || 'ゲスト';
+  return ContentService.createTextOutput('こんにちは、' + name + 'さん！ (POST)');
+}
+
+index.htms
+<body>
+    <h1>GAS連携テスト</h1>
+    <p>お名前を入力してください:</p>
+    <input type="text" id="nameInput" placeholder="例: 太郎">
+    <button onclick="sendGetRequest()">GETで送信</button>
+    <button onclick="sendPostRequest()">POSTで送信</button>
+    <p id="responseArea"></p>
+  
 <script>
   const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwtMmAT2BwUB53u950ZlsIebHnwsASovsFhrYwDcpn8iky4JjgZ9burTpn2nOKrMTAq/exec';
 
@@ -36,3 +59,41 @@
     }
   }
 </script>
+       const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwtMmAT2BwUB53u950ZlsIebHnwsASovsFhrYwDcpn8iky4JjgZ9burTpn2nOKrMTAq/exec'; // ★ここにあなたのウェブアプリURLを貼り付ける
+
+        async function sendGetRequest() {
+            const name = document.getElementById('nameInput').value || 'ゲスト';
+            const url = ${GAS_WEB_APP_URL}?name=${name};
+
+            try {
+                const response = await fetch(url);
+                const text = await response.text();
+                document.getElementById('responseArea').innerText = text;
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('responseArea').innerText = 'エラーが発生しました。';
+            }
+        }
+
+        async function sendPostRequest() {
+            const name = document.getElementById('nameInput').value || 'ゲスト';
+            const data = { name: name };
+
+            try {
+                const response = await fetch(GAS_WEB_APP_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                const text = await response.text();
+                document.getElementById('responseArea').innerText = text;
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('responseArea').innerText = 'エラーが発生しました。';
+            }
+        }
+    </script>
+</body>
+</html>
