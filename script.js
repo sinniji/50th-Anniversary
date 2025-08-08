@@ -1,5 +1,5 @@
 // GASのWebアプリURLをここに貼り付けてください
-const gasApiUrl = 'https://script.google.com/macros/s/AKfycbyOGC00pgRKzD6G6CktIViHuo8_JgNVPexglgITrQMU1KGuVmXuf4xgOr2zjSqjmdsF/exec/exec';
+const gasApiUrl = 'https://script.google.com/macros/s/AKfycbyOGC00pgRKzD6G6CktIViHuo8_JgNVPexglgITrQMU1KGuVmXuf4xgOr2zjSqjmdsF/exec';
 
 const participants = document.getElementById('participants');
 for (let i = 0; i < 5; i++) {
