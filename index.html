@@ -34,7 +34,7 @@
         }
 
         .form-title img {
-            height: 40px;
+            height: 100px;
             width: auto;
         }
 
@@ -157,6 +157,7 @@
             font-weight: bold;
             cursor: pointer;
             color: #333;
+            transition: all 0.3s ease;
         }
 
         .submit-button:hover {
@@ -165,6 +166,17 @@
 
         .submit-button:active {
             transform: translateY(1px);
+        }
+
+        .submit-button.sending {
+            background: linear-gradient(135deg, #666666, #444444);
+            color: white;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .submit-button.sending:hover {
+            background: linear-gradient(135deg, #666666, #444444);
         }
 
         @media (max-width: 768px) {
@@ -188,7 +200,7 @@
             }
             
             .form-title img {
-                height: 30px;
+                height: 75px;
             }
             
             .form-description {
@@ -243,7 +255,7 @@
 <body>
     <div class="form-container">
         <h1 class="form-title">
-            <img src="https://raw.githubusercontent.com/sinniji/50th-Anniversary/refs/heads/main/images/logo.png" alt="ロゴ" style="transform: scale(2); transform-origin: top left;">
+            <img src="https://raw.githubusercontent.com/sinniji/50th-Anniversary/refs/heads/main/images/logo.png" alt="ロゴ">
             北九州手話の会新虹の会　創立50周年記念申込みフォーム
         </h1>
         
@@ -290,7 +302,7 @@
                                 <option value="ろう者（北九州市外）">ろう者（北九州市外）</option>
                                 <option value="サークル会員（新虹の会以外）">サークル会員（新虹の会以外）</option>
                                 <option value="一般">一般</option>
-                             </select>
+                            </select>
                         </td>
                         <td><input type="email" class="form-input" name="email1" placeholder="半角入力"></td>
                     </tr>
@@ -316,7 +328,7 @@
                                 <option value="ろう者（北九州市外）">ろう者（北九州市外）</option>
                                 <option value="サークル会員（新虹の会以外）">サークル会員（新虹の会以外）</option>
                                 <option value="一般">一般</option>
-                             </select>
+                            </select>
                         </td>
                         <td><input type="email" class="form-input" name="email2" placeholder="半角入力"></td>
                     </tr>
@@ -342,7 +354,7 @@
                                 <option value="ろう者（北九州市外）">ろう者（北九州市外）</option>
                                 <option value="サークル会員（新虹の会以外）">サークル会員（新虹の会以外）</option>
                                 <option value="一般">一般</option>
-                             </select>
+                            </select>
                         </td>
                         <td><input type="email" class="form-input" name="email3" placeholder="半角入力"></td>
                     </tr>
@@ -368,7 +380,7 @@
                                 <option value="ろう者（北九州市外）">ろう者（北九州市外）</option>
                                 <option value="サークル会員（新虹の会以外）">サークル会員（新虹の会以外）</option>
                                 <option value="一般">一般</option>
-                             </select>
+                            </select>
                         </td>
                         <td><input type="email" class="form-input" name="email4" placeholder="半角入力"></td>
                     </tr>
@@ -394,7 +406,7 @@
                                 <option value="ろう者（北九州市外）">ろう者（北九州市外）</option>
                                 <option value="サークル会員（新虹の会以外）">サークル会員（新虹の会以外）</option>
                                 <option value="一般">一般</option>
-                             </select>
+                            </select>
                         </td>
                         <td><input type="email" class="form-input" name="email5" placeholder="半角入力"></td>
                     </tr>
@@ -418,7 +430,18 @@
     </div>
 
     <script>
-        // エラー表示とバリデーション機能
+        // 送信ボタンの状態管理
+        function setButtonSending(button, isSending) {
+            if (isSending) {
+                button.classList.add('sending');
+                button.disabled = true;
+                button.textContent = '送信中...';
+            } else {
+                button.classList.remove('sending');
+                button.disabled = false;
+                button.textContent = '送信';
+            }
+        }
         function showError(message) {
             const errorDiv = document.getElementById('errorMessage');
             errorDiv.textContent = message;
@@ -522,6 +545,11 @@
                 return;
             }
             
+            const submitButton = e.target.querySelector('.submit-button');
+            
+            // 送信開始状態に変更
+            setButtonSending(submitButton, true);
+            
             const formData = new FormData(e.target);
             const data = [];
             
@@ -547,7 +575,7 @@
             
             try {
                 // GASのWebAppのURLを設定してください
-                const GAS_URL = 'https://script.google.com/macros/s/AKfycbxKhffML-t-EVHEeQwRGahmJOdRgb7Gz5i0lZSOlTLezuUxXhUXqNayZKDdI1Xx7e0FyQ/exec';
+                const GAS_URL = 'YOUR_GAS_WEB_APP_URL_HERE';
                 
                 const response = await fetch(GAS_URL, {
                     method: 'POST',
@@ -569,6 +597,9 @@
             } catch (error) {
                 console.error('Error:', error);
                 alert('送信中にエラーが発生しました。もう一度お試しください。');
+            } finally {
+                // 送信完了後、ボタンを元の状態に戻す
+                setButtonSending(submitButton, false);
             }
         });
 
