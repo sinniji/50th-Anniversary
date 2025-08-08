@@ -23,11 +23,19 @@
         }
 
         .form-title {
-            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
             font-size: 24px;
             font-weight: bold;
             margin-bottom: 20px;
             color: #333;
+        }
+
+        .form-title img {
+            height: 40px;
+            width: auto;
         }
 
         .form-description {
@@ -175,6 +183,12 @@
             .form-title {
                 font-size: 18px;
                 margin-bottom: 15px;
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .form-title img {
+                height: 30px;
             }
             
             .form-description {
@@ -228,7 +242,10 @@
 </head>
 <body>
     <div class="form-container">
-        <h1 class="form-title">北九州手話の会新虹の会　創立50周年記念申込みフォーム</h1>
+        <h1 class="form-title">
+            <img src="https://github.com/yourusername/yourrepository/raw/main/main-images/logo.png" alt="ロゴ">
+            北九州手話の会新虹の会　創立50周年記念申込みフォーム
+        </h1>
         
         <div class="form-description">
             お申し込み後、自動返信メールをお送りいたします。届かない場合は以下をご確認ください：
@@ -244,10 +261,10 @@
             <table class="form-table">
                 <thead>
                     <tr>
-                        <th width="15%">氏名</th>
+                        <th width="25%">氏名</th>
                         <th width="20%">聴者・ろう者</th>
                         <th width="25%">所属地域</th>
-                        <th width="40%">Mail</th>
+                        <th width="36%">Mail</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -273,7 +290,7 @@
                                 <option value="ろう者（北九州市外）">ろう者（北九州市外）</option>
                                 <option value="サークル会員（新虹の会以外）">サークル会員（新虹の会以外）</option>
                                 <option value="一般">一般</option>
-                            </select>
+                             </select>
                         </td>
                         <td><input type="email" class="form-input" name="email1" placeholder="半角入力"></td>
                     </tr>
@@ -299,7 +316,7 @@
                                 <option value="ろう者（北九州市外）">ろう者（北九州市外）</option>
                                 <option value="サークル会員（新虹の会以外）">サークル会員（新虹の会以外）</option>
                                 <option value="一般">一般</option>
-                            </select>
+                             </select>
                         </td>
                         <td><input type="email" class="form-input" name="email2" placeholder="半角入力"></td>
                     </tr>
@@ -325,7 +342,7 @@
                                 <option value="ろう者（北九州市外）">ろう者（北九州市外）</option>
                                 <option value="サークル会員（新虹の会以外）">サークル会員（新虹の会以外）</option>
                                 <option value="一般">一般</option>
-                            </select>
+                             </select>
                         </td>
                         <td><input type="email" class="form-input" name="email3" placeholder="半角入力"></td>
                     </tr>
@@ -351,7 +368,7 @@
                                 <option value="ろう者（北九州市外）">ろう者（北九州市外）</option>
                                 <option value="サークル会員（新虹の会以外）">サークル会員（新虹の会以外）</option>
                                 <option value="一般">一般</option>
-                            </select>
+                             </select>
                         </td>
                         <td><input type="email" class="form-input" name="email4" placeholder="半角入力"></td>
                     </tr>
@@ -377,7 +394,7 @@
                                 <option value="ろう者（北九州市外）">ろう者（北九州市外）</option>
                                 <option value="サークル会員（新虹の会以外）">サークル会員（新虹の会以外）</option>
                                 <option value="一般">一般</option>
-                            </select>
+                             </select>
                         </td>
                         <td><input type="email" class="form-input" name="email5" placeholder="半角入力"></td>
                     </tr>
@@ -524,6 +541,7 @@
             const submitData = {
                 entries: data,
                 comments: formData.get('comments') || '',
+                ticketCount: data.length,
                 timestamp: new Date().toISOString()
             };
             
