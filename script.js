@@ -109,7 +109,8 @@ submitButton.addEventListener('click', async () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(formData)
+      body: JSON.stringify(formData),
+      mode: 'cors'
     });
 
     const result = await response.json();
