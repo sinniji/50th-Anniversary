@@ -1,49 +1,53 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css?family=Noto+Sans+JP&display=swap" rel="stylesheet">
-  <title>５０周年記念申し込みフォーム</title>
+    <meta charset="UTF-8">
+    <title>GAS連携テスト</title>
 </head>
 <body>
-  <div class="form-container">
-    <div class="header-flex">
-      <div id="imageContainer">
-        <img src="images/logo.png" alt="５０周年ロゴ" style="max-width:75%;">
-      </div>
-      <h2>５０周年記念申し込みフォーム</h2>
-    </div>
+    <h1>GAS連携テスト</h1>
+    <p>お名前を入力してください:</p>
+    <input type="text" id="nameInput" placeholder="例: 太郎">
+    <button onclick="sendGetRequest()">GETで送信</button>
+    <button onclick="sendPostRequest()">POSTで送信</button>
+    <p id="responseArea"></p>
 
-    <div class="note">
-      <p>お申し込み後、自動返信メールをお送りいたします。届かない場合は以下をご確認ください：</p>
-      <p>1. 入力メールアドレスに誤りがないか</p>
-      <p>2. 迷惑メールフォルダに振り分けられていないか</p>
-    </div>
+    <script>
+        const GAS_WEB_APP_URL = 'GAS_WEB_APP_URL'; // ★ここにあなたのウェブアプリURLを貼り付ける
 
-    <form id="anniversaryForm">
-      <div class="input-row">
-        <label class="name-label">氏名</label>
-        <label class="hearing-status-label">聴者・ろう者</label>
-        <label class="affiliation-label">所属地域</label>
-        <label class="contact-label">Mail</label>
-      </div>
+        async function sendGetRequest() {
+            const name = document.getElementById('nameInput').value || 'ゲスト';
+            const url = `${GAS_WEB_APP_URL}?name=${name}`;
 
-      <div id="participants"></div>
+            try {
+                const response = await fetch(url);
+                const text = await response.text();
+                document.getElementById('responseArea').innerText = text;
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('responseArea').innerText = 'エラーが発生しました。';
+            }
+        }
 
-      <div class="total-tickets-row">
-        <label>チケット合計枚数</label>
-        <span id="totalTickets">0</span>
-        <label>枚</label>
-      </div>
+        async function sendPostRequest() {
+            const name = document.getElementById('nameInput').value || 'ゲスト';
+            const data = { name: name };
 
-      <textarea id="additionalComments" rows="5" placeholder="ご意見・ご要望はこちらにご記入ください"></textarea>
-      <div class="required-note">*欄は必須入力です。</div>
-      <button type="button" class="submit-button" id="submitButton">送信</button>
-      <div class="spinner" id="loadingSpinner"></div>
-    </form>
-  </div>
-  <script src="script.js"></script>
+            try {
+                const response = await fetch(GAS_WEB_APP_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                const text = await response.text();
+                document.getElementById('responseArea').innerText = text;
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('responseArea').innerText = 'エラーが発生しました。';
+            }
+        }
+    </script>
 </body>
 </html>
