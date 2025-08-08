@@ -1,31 +1,557 @@
-<form id="myForm">
-  <input type="text" id="name" placeholder="名前">
-  <input type="email" id="email" placeholder="メール">
-  <button type="submit">送信</button>
-</form>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>創立50周年記念申込みフォーム</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #c8e6c9, #e8f5e8);
+            font-family: 'Hiragino Sans', 'Yu Gothic', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
 
-<script>
-document.getElementById('myForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  
-  const data = {
-    name: document.getElementById('name').value,
-    email: document.getElementById('email').value
-  };
-  
-  try {
-    const response = await fetch('https://script.google.com/macros/s/AKfycbx8Mnwgu36H3ljrTW4mE35xQiKrjgl4hRj_ouifc4dpIf2-npLiDjhayfRZgab5PBAA/exec', {
-      method: 'POST',
-      mode: 'no-cors', // CORSを回避
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data)
-    });
-    
-    alert('送信完了');
-  } catch (error) {
-    alert('エラーが発生しました');
-  }
-});
-</script>
+        .form-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+
+        .form-title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .form-description {
+            margin-bottom: 20px;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .form-description ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .form-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .form-table th {
+            background: linear-gradient(135deg, #64b5f6, #42a5f5);
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+            border: 1px solid #ddd;
+        }
+
+        .form-table td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            background: #f9f9f9;
+        }
+
+        .required-mark {
+            color: red;
+            font-size: 18px;
+            vertical-align: middle;
+            padding-right: 5px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+            background: white;
+        }
+
+        .ticket-counter {
+            text-align: right;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .ticket-count {
+            border: 1px solid #ccc;
+            padding: 5px 10px;
+            margin: 0 5px;
+            border-radius: 3px;
+            background: white;
+            min-width: 30px;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .comments-section {
+            margin-bottom: 20px;
+        }
+
+        .comments-textarea {
+            width: 100%;
+            height: 80px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+
+        .form-input.error {
+            border: 2px solid #ff4444;
+            background-color: #fff5f5;
+        }
+
+        .error-message {
+            color: #ff4444;
+            font-size: 14px;
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #fff5f5;
+            border: 1px solid #ff4444;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .submit-button {
+            display: block;
+            width: 120px;
+            margin: 30px auto;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #e0e0e0, #bdbdbd);
+            border: 1px solid #999;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .submit-button:hover {
+            background: linear-gradient(135deg, #d5d5d5, #b0b0b0);
+        }
+
+        .submit-button:active {
+            transform: translateY(1px);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 5px;
+                overflow-x: auto;
+            }
+            
+            .form-container {
+                margin: 0;
+                padding: 15px;
+                min-width: 800px; /* スマホでも横幅を広く保持 */
+                border-radius: 5px;
+            }
+            
+            .form-title {
+                font-size: 18px;
+                margin-bottom: 15px;
+            }
+            
+            .form-description {
+                font-size: 13px;
+                margin-bottom: 15px;
+            }
+            
+            .form-table {
+                min-width: 750px; /* テーブルの最小幅を確保 */
+            }
+            
+            .form-table th,
+            .form-table td {
+                padding: 10px 8px;
+                font-size: 13px;
+            }
+            
+            .form-input,
+            .form-select {
+                padding: 10px 8px;
+                font-size: 14px;
+                min-height: 20px;
+            }
+            
+            .ticket-counter {
+                font-size: 13px;
+                text-align: center;
+                margin: 15px 0;
+            }
+            
+            .comments-textarea {
+                font-size: 14px;
+                padding: 10px;
+                height: 60px;
+            }
+            
+            .submit-button {
+                width: 150px;
+                padding: 12px 20px;
+                font-size: 16px;
+                margin: 20px auto;
+            }
+            
+        .required-note {
+            color: red;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1 class="form-title">創立50周年記念申込みフォーム</h1>
+        
+        <div class="form-description">
+            お申し込み後、自動返信メールをお送りいたします。届かない場合は以下をご確認ください：
+            <ol>
+                <li>入力メールアドレスに誤りがないか</li>
+                <li>迷惑メールフォルダに振り分けられていないか</li>
+            </ol>
+        </div>
+
+        <form id="anniversaryForm">
+            <div class="error-message" id="errorMessage"></div>
+
+            <table class="form-table">
+                <thead>
+                    <tr>
+                        <th width="15%">氏名</th>
+                        <th width="20%">職業・ろう者</th>
+                        <th width="25%">所属地域</th>
+                        <th width="40%">Mail</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div style="display: flex; align-items: center;">
+                                <span class="required-mark">*</span>
+                                <input type="text" class="form-input" name="name1" required style="flex: 1;">
+                            </div>
+                        </td>
+                        <td>
+                            <select class="form-select" name="type1">
+                                <option value="">選択してください</option>
+                                <option value="職員">職員</option>
+                                <option value="ろう者">ろう者</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select class="form-select" name="region1">
+                                <option value="">選択してください</option>
+                                <option value="北海道・東北">北海道・東北</option>
+                                <option value="関東">関東</option>
+                                <option value="中部・近畿">中部・近畿</option>
+                                <option value="中国・四国・九州">中国・四国・九州</option>
+                            </select>
+                        </td>
+                        <td><input type="email" class="form-input" name="email1" placeholder="半角入力"></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div style="display: flex; align-items: center;">
+                                <span style="visibility: hidden; padding-right: 5px; font-size: 18px;">*</span>
+                                <input type="text" class="form-input" name="name2" style="flex: 1;">
+                            </div>
+                        </td>
+                        <td>
+                            <select class="form-select" name="type2">
+                                <option value="">選択してください</option>
+                                <option value="職員">職員</option>
+                                <option value="ろう者">ろう者</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select class="form-select" name="region2">
+                                <option value="">選択してください</option>
+                                <option value="北海道・東北">北海道・東北</option>
+                                <option value="関東">関東</option>
+                                <option value="中部・近畿">中部・近畿</option>
+                                <option value="中国・四国・九州">中国・四国・九州</option>
+                            </select>
+                        </td>
+                        <td><input type="email" class="form-input" name="email2" placeholder="半角入力"></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div style="display: flex; align-items: center;">
+                                <span style="visibility: hidden; padding-right: 5px; font-size: 18px;">*</span>
+                                <input type="text" class="form-input" name="name3" style="flex: 1;">
+                            </div>
+                        </td>
+                        <td>
+                            <select class="form-select" name="type3">
+                                <option value="">選択してください</option>
+                                <option value="職員">職員</option>
+                                <option value="ろう者">ろう者</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select class="form-select" name="region3">
+                                <option value="">選択してください</option>
+                                <option value="北海道・東北">北海道・東北</option>
+                                <option value="関東">関東</option>
+                                <option value="中部・近畿">中部・近畿</option>
+                                <option value="中国・四国・九州">中国・四国・九州</option>
+                            </select>
+                        </td>
+                        <td><input type="email" class="form-input" name="email3" placeholder="半角入力"></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div style="display: flex; align-items: center;">
+                                <span style="visibility: hidden; padding-right: 5px; font-size: 18px;">*</span>
+                                <input type="text" class="form-input" name="name4" style="flex: 1;">
+                            </div>
+                        </td>
+                        <td>
+                            <select class="form-select" name="type4">
+                                <option value="">選択してください</option>
+                                <option value="職員">職員</option>
+                                <option value="ろう者">ろう者</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select class="form-select" name="region4">
+                                <option value="">選択してください</option>
+                                <option value="北海道・東北">北海道・東北</option>
+                                <option value="関東">関東</option>
+                                <option value="中部・近畿">中部・近畿</option>
+                                <option value="中国・四国・九州">中国・四国・九州</option>
+                            </select>
+                        </td>
+                        <td><input type="email" class="form-input" name="email4" placeholder="半角入力"></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div style="display: flex; align-items: center;">
+                                <span style="visibility: hidden; padding-right: 5px; font-size: 18px;">*</span>
+                                <input type="text" class="form-input" name="name5" style="flex: 1;">
+                            </div>
+                        </td>
+                        <td>
+                            <select class="form-select" name="type5">
+                                <option value="">選択してください</option>
+                                <option value="職員">職員</option>
+                                <option value="ろう者">ろう者</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select class="form-select" name="region5">
+                                <option value="">選択してください</option>
+                                <option value="北海道・東北">北海道・東北</option>
+                                <option value="関東">関東</option>
+                                <option value="中部・近畿">中部・近畿</option>
+                                <option value="中国・四国・九州">中国・四国・九州</option>
+                            </select>
+                        </td>
+                        <td><input type="email" class="form-input" name="email5" placeholder="半角入力"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="ticket-counter">
+                チケット合計枚数　<span class="ticket-count" id="ticketCount">0</span>　枚
+            </div>
+
+            <div class="comments-section">
+                <textarea class="comments-textarea" name="comments" placeholder="ご意見・ご要望はこちらにご記入ください"></textarea>
+            </div>
+
+            <div class="required-note">
+                *印は必須入力です。
+            </div>
+
+            <button type="submit" class="submit-button">送信</button>
+        </form>
+    </div>
+
+    <script>
+        // エラー表示とバリデーション機能
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            
+            // エラーメッセージの位置までスクロール
+            errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function hideError() {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.style.display = 'none';
+        }
+
+        function clearErrorStyles() {
+            // 全ての入力フィールドからエラースタイルを削除
+            const inputs = document.querySelectorAll('.form-input');
+            inputs.forEach(input => {
+                input.classList.remove('error');
+            });
+        }
+
+        function validateForm() {
+            clearErrorStyles();
+            hideError();
+            
+            const name1 = document.querySelector('input[name="name1"]');
+            const email1 = document.querySelector('input[name="email1"]');
+            
+            let hasError = false;
+            let errorMessage = '';
+            
+            // 1行目の氏名チェック
+            if (!name1.value.trim()) {
+                name1.classList.add('error');
+                hasError = true;
+                errorMessage += '氏名';
+            }
+            
+            // 1行目のメールチェック
+            if (!email1.value.trim()) {
+                email1.classList.add('error');
+                hasError = true;
+                if (errorMessage) errorMessage += 'とメール';
+                else errorMessage += 'メール';
+            } else {
+                // メール形式チェック
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailPattern.test(email1.value)) {
+                    email1.classList.add('error');
+                    hasError = true;
+                    if (errorMessage) errorMessage += 'とメール（形式が正しくありません）';
+                    else errorMessage += 'メール（形式が正しくありません）';
+                }
+            }
+            
+            if (hasError) {
+                showError(`必須入力欄（${errorMessage}）が空欄または不正です。`);
+                return false;
+            }
+            
+            return true;
+        }
+
+        // フォーカス時にエラースタイルを削除
+        function setupErrorClearOnFocus() {
+            const inputs = document.querySelectorAll('.form-input');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.classList.remove('error');
+                    // もし全てのエラーがクリアされたらエラーメッセージも非表示
+                    const errorInputs = document.querySelectorAll('.form-input.error');
+                    if (errorInputs.length === 0) {
+                        hideError();
+                    }
+                });
+            });
+        }
+        function updateTicketCount() {
+            let count = 0;
+            for (let i = 1; i <= 5; i++) {
+                const name = document.querySelector(`input[name="name${i}"]`).value.trim();
+                if (name) {
+                    count++;
+                }
+            }
+            document.getElementById('ticketCount').textContent = count;
+        }
+
+        // 各名前欄の入力時にチケット数を更新
+        for (let i = 1; i <= 5; i++) {
+            document.querySelector(`input[name="name${i}"]`).addEventListener('input', updateTicketCount);
+        }
+
+        // フォーム送信処理
+        document.getElementById('anniversaryForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // バリデーションチェック
+            if (!validateForm()) {
+                return;
+            }
+            
+            const formData = new FormData(e.target);
+            const data = [];
+            
+            // 各行のデータを収集
+            for (let i = 1; i <= 5; i++) {
+                const name = formData.get(`name${i}`)?.trim();
+                if (name) { // 名前が入力されている行のみ送信
+                    data.push({
+                        name: name,
+                        type: formData.get(`type${i}`) || '',
+                        region: formData.get(`region${i}`) || '',
+                        email: formData.get(`email${i}`) || ''
+                    });
+                }
+            }
+            
+            const submitData = {
+                entries: data,
+                comments: formData.get('comments') || '',
+                timestamp: new Date().toISOString()
+            };
+            
+            try {
+                // GASのWebAppのURLを設定してください
+                const GAS_URL = 'https://script.google.com/macros/s/AKfycbx8Mnwgu36H3ljrTW4mE35xQiKrjgl4hRj_ouifc4dpIf2-npLiDjhayfRZgab5PBAA/exec';
+                
+                const response = await fetch(GAS_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(submitData)
+                });
+                
+                alert('送信完了しました。ありがとうございます。');
+                
+                // フォームをリセット
+                e.target.reset();
+                updateTicketCount();
+                clearErrorStyles();
+                hideError();
+                
+            } catch (error) {
+                console.error('Error:', error);
+                alert('送信中にエラーが発生しました。もう一度お試しください。');
+            }
+        });
+
+        // 初期表示時のチケット数更新と設定
+        updateTicketCount();
+        setupErrorClearOnFocus();
+    </script>
+</body>
+</html>
