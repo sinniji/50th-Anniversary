@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+    <script src="https://www.google.com/recaptcha/api.js?render=6LfGurcrAAAAAD65v_jGJlOTlaTW2fgDO5te1vZk"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>北九州手話の会新虹の会　創立50周年記念申込みフォーム</title>
@@ -426,6 +427,7 @@
                 *印欄の氏名・Mailは必須入力です。
             </div>
 
+            <input type="hidden" name="recaptchaToken" id="recaptcha-token">
             <button type="submit" class="submit-button">送信</button>
         </form>
     </div>
@@ -538,70 +540,93 @@
         }
 
         // フォーム送信処理
-        document.getElementById('anniversaryForm').addEventListener('submit', async (e) => {
+        document.getElementById('anniversaryForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            
+        
             // バリデーションチェック
             if (!validateForm()) {
                 return;
             }
-            
+        
             const submitButton = e.target.querySelector('.submit-button');
-            
+        
             // 送信開始状態に変更
             setButtonSending(submitButton, true);
-            
-            const formData = new FormData(e.target);
-            const data = [];
-            
-            // 各行のデータを収集
-            for (let i = 1; i <= 5; i++) {
-                const name = formData.get(`name${i}`)?.trim();
-                if (name) { // 名前が入力されている行のみ送信
-                    data.push({
-                        name: name,
-                        type: formData.get(`type${i}`) || '',
-                        region: formData.get(`region${i}`) || '',
-                        email: formData.get(`email${i}`) || ''
-                    });
-                }
-            }
-            
-            const submitData = {
-                entries: data,
-                comments: formData.get('comments') || '',
-                ticketCount: data.length,
-                timestamp: new Date().toISOString()
-            };
-            
-            try {
-                // GASのWebAppのURLを設定してください
-                const GAS_URL = 'https://script.google.com/macros/s/AKfycbycggbtN8eM2kJ42-q2oLWHx7Qcp1ZTYNmVxz06btYds0EgM4ndt7775Dhkzs5GJfLdIg/exec';
-                
-                const response = await fetch(GAS_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(submitData)
+        
+            // ★★★ reCAPTCHAの実行 ★★★
+            // 'YOUR_SITE_KEY'をあなたのサイトキーに置き換えてください
+            const siteKey = '6LfGurcrAAAAAD65v_jGJlOTlaTW2fgDO5te1vZk';
+        
+            grecaptcha.ready(function () {
+                grecaptcha.execute(siteKey, { action: 'submit' }).then(async function (token) {
+                    // reCAPTCHAトークンが取得できたら、フォームデータを送信する
+        
+                    const formData = new FormData(e.target);
+                    const data = [];
+        
+                    // 各行のデータを収集
+                    for (let i = 1; i <= 5; i++) {
+                        const name = formData.get(`name${i}`)?.trim();
+                        if (name) { // 名前が入力されている行のみ送信
+                            data.push({
+                                name: name,
+                                type: formData.get(`type${i}`) || '',
+                                region: formData.get(`region${i}`) || '',
+                                email: formData.get(`email${i}`) || ''
+                            });
+                        }
+                    }
+        
+                    const submitData = {
+                        entries: data,
+                        comments: formData.get('comments') || '',
+                        ticketCount: data.length,
+                        timestamp: new Date().toISOString()
+                    };
+        
+                    // ★★★ reCAPTCHAトークンを送信データに追加 ★★★
+                    submitData.recaptchaToken = token;
+        
+                    try {
+                        // GASのWebAppのURLを設定してください
+                        const GAS_URL = 'https://script.google.com/macros/s/AKfycbycggbtN8eM2kJ42-q2oLWHx7Qcp1ZTYNmVxz06btYds0EgM4ndt7775Dhkzs5GJfLdIg/exec';
+        
+                        const response = await fetch(GAS_URL, {
+                            method: 'POST',
+                            // mode: 'no-cors', // ← 削除。GASからの応答を受け取るために必要
+                            // headers: { 'Content-Type': 'application/json' }, // ← 変更。GASとの通信でより確実な形式に
+                            headers: {
+                              'Content-Type': 'text/plain;charset=utf-8',
+                            },
+                            body: JSON.stringify(submitData)
+                        });
+        
+                        // ★★★ GASからの応答をJSONとして解釈 ★★★
+                        const result = await response.json();
+        
+                        // ★★★ GASからの結果に応じて処理を分岐 ★★★
+                        if (result.status === 'success') {
+                            alert('送信完了しました。ありがとうございます。');
+        
+                            // フォームをリセット
+                            e.target.reset();
+                            updateTicketCount();
+                            clearErrorStyles();
+                            hideError();
+                        } else {
+                            // GAS側でreCAPTCHA検証失敗などのエラーを検知した場合
+                            throw new Error(result.message || 'サーバーでエラーが発生しました。');
+                        }
+        
+                    } catch (error) {
+                        console.error('Error:', error);
+                        alert('送信中にエラーが発生しました。もう一度お試しください。');
+                    } finally {
+                        // 送信完了後、ボタンを元の状態に戻す
+                        setButtonSending(submitButton, false);
+                    }
                 });
-                
-                alert('送信完了しました。ありがとうございます。');
-                
-                // フォームをリセット
-                e.target.reset();
-                updateTicketCount();
-                clearErrorStyles();
-                hideError();
-                
-            } catch (error) {
-                console.error('Error:', error);
-                alert('送信中にエラーが発生しました。もう一度お試しください。');
-            } finally {
-                // 送信完了後、ボタンを元の状態に戻す
-                setButtonSending(submitButton, false);
-            }
+            });
         });
 
         // 初期表示時のチケット数更新と設定
