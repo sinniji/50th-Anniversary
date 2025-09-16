@@ -18,7 +18,7 @@
             background: white;
             border-radius: 10px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            max-width: 900px;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 30px;
         }
@@ -30,7 +30,7 @@
             gap: 15px;
             font-size: 24px;
             font-weight: bold;
-            margin-bottom: 30px; /* 余白を増やして説明文との間隔を作る */
+            margin-bottom: 30px;
             color: #333;
         }
 
@@ -114,6 +114,10 @@
             text-align: center;
         }
 
+        .ticket-counter-row {
+            margin-bottom: 10px;
+        }
+
         .comments-section {
             margin-bottom: 20px;
         }
@@ -189,13 +193,13 @@
             .form-container {
                 margin: 0;
                 padding: 15px;
-                min-width: 800px; /* スマホでも横幅を広く保持 */
+                min-width: 850px;
                 border-radius: 5px;
             }
             
             .form-title {
                 font-size: 18px;
-                margin-bottom: 20px; /* レスポンシブでも適切な余白を確保 */
+                margin-bottom: 20px;
                 flex-direction: column;
                 gap: 10px;
             }
@@ -210,7 +214,7 @@
             }
             
             .form-table {
-                min-width: 750px; /* テーブルの最小幅を確保 */
+                min-width: 800px;
             }
             
             .form-table th,
@@ -275,10 +279,11 @@
             <table class="form-table">
                 <thead>
                     <tr>
-                        <th width="25%">氏名</th>
-                        <th width="20%">聴者・ろう者</th>
-                        <th width="25%">所属地域</th>
-                        <th width="36%">Mail</th>
+                        <th width="20%">氏名</th>
+                        <th width="15%">大人・子ども</th>
+                        <th width="15%">聴者・ろう者</th>
+                        <th width="20%">所属地域</th>
+                        <th width="30%">Mail</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -288,6 +293,13 @@
                                 <span class="required-mark">*</span>
                                 <input type="text" class="form-input" name="name1" required style="flex: 1;">
                             </div>
+                        </td>
+                        <td>
+                            <select class="form-select" name="age1">
+                                <option value="">選択してください</option>
+                                <option value="大人">大人</option>
+                                <option value="子ども">子ども</option>
+                            </select>
                         </td>
                         <td>
                             <select class="form-select" name="type1">
@@ -302,8 +314,7 @@
                                 <option value="新虹の会会員">新虹の会会員</option>
                                 <option value="ろう者（北九州市内）">ろう者（北九州市内）</option>
                                 <option value="ろう者（北九州市外）">ろう者（北九州市外）</option>
-                                <option value="サークル会員（新虹の会以外）">サークル会員（新虹の会以外）</option>
-                                <option value="一般">一般</option>
+                                <option value="一般（市外）">一般（市外）</option>
                              </select>
                         </td>
                         <td><input type="email" class="form-input" name="email1" placeholder="半角入力"></td>
@@ -314,6 +325,13 @@
                                 <span style="visibility: hidden; padding-right: 5px; font-size: 18px;">*</span>
                                 <input type="text" class="form-input" name="name2" style="flex: 1;">
                             </div>
+                        </td>
+                        <td>
+                            <select class="form-select" name="age2">
+                                <option value="">選択してください</option>
+                                <option value="大人">大人</option>
+                                <option value="子ども">子ども</option>
+                            </select>
                         </td>
                         <td>
                             <select class="form-select" name="type2">
@@ -328,8 +346,7 @@
                                 <option value="新虹の会会員">新虹の会会員</option>
                                 <option value="ろう者（北九州市内）">ろう者（北九州市内）</option>
                                 <option value="ろう者（北九州市外）">ろう者（北九州市外）</option>
-                                <option value="サークル会員（新虹の会以外）">サークル会員（新虹の会以外）</option>
-                                <option value="一般">一般</option>
+                                <option value="一般（市外）">一般（市外）</option>
                               </select>
                         </td>
                         <td><input type="email" class="form-input" name="email2" placeholder="半角入力"></td>
@@ -340,6 +357,13 @@
                                 <span style="visibility: hidden; padding-right: 5px; font-size: 18px;">*</span>
                                 <input type="text" class="form-input" name="name3" style="flex: 1;">
                             </div>
+                        </td>
+                        <td>
+                            <select class="form-select" name="age3">
+                                <option value="">選択してください</option>
+                                <option value="大人">大人</option>
+                                <option value="子ども">子ども</option>
+                            </select>
                         </td>
                         <td>
                             <select class="form-select" name="type3">
@@ -354,8 +378,7 @@
                                 <option value="新虹の会会員">新虹の会会員</option>
                                 <option value="ろう者（北九州市内）">ろう者（北九州市内）</option>
                                 <option value="ろう者（北九州市外）">ろう者（北九州市外）</option>
-                                <option value="サークル会員（新虹の会以外）">サークル会員（新虹の会以外）</option>
-                                <option value="一般">一般</option>
+                                <option value="一般（市外）">一般（市外）</option>
                              </select>
                         </td>
                         <td><input type="email" class="form-input" name="email3" placeholder="半角入力"></td>
@@ -366,6 +389,13 @@
                                 <span style="visibility: hidden; padding-right: 5px; font-size: 18px;">*</span>
                                 <input type="text" class="form-input" name="name4" style="flex: 1;">
                             </div>
+                        </td>
+                        <td>
+                            <select class="form-select" name="age4">
+                                <option value="">選択してください</option>
+                                <option value="大人">大人</option>
+                                <option value="子ども">子ども</option>
+                            </select>
                         </td>
                         <td>
                             <select class="form-select" name="type4">
@@ -380,8 +410,7 @@
                                 <option value="新虹の会会員">新虹の会会員</option>
                                 <option value="ろう者（北九州市内）">ろう者（北九州市内）</option>
                                 <option value="ろう者（北九州市外）">ろう者（北九州市外）</option>
-                                <option value="サークル会員（新虹の会以外）">サークル会員（新虹の会以外）</option>
-                                <option value="一般">一般</option>
+                                <option value="一般（市外）">一般（市外）</option>
                              </select>
                         </td>
                         <td><input type="email" class="form-input" name="email4" placeholder="半角入力"></td>
@@ -392,6 +421,13 @@
                                 <span style="visibility: hidden; padding-right: 5px; font-size: 18px;">*</span>
                                 <input type="text" class="form-input" name="name5" style="flex: 1;">
                             </div>
+                        </td>
+                        <td>
+                            <select class="form-select" name="age5">
+                                <option value="">選択してください</option>
+                                <option value="大人">大人</option>
+                                <option value="子ども">子ども</option>
+                            </select>
                         </td>
                         <td>
                             <select class="form-select" name="type5">
@@ -406,8 +442,7 @@
                                 <option value="新虹の会会員">新虹の会会員</option>
                                 <option value="ろう者（北九州市内）">ろう者（北九州市内）</option>
                                 <option value="ろう者（北九州市外）">ろう者（北九州市外）</option>
-                                <option value="サークル会員（新虹の会以外）">サークル会員（新虹の会以外）</option>
-                                <option value="一般">一般</option>
+                                <option value="一般（市外）">一般（市外）</option>
                               </select>
                         </td>
                         <td><input type="email" class="form-input" name="email5" placeholder="半角入力"></td>
@@ -416,7 +451,12 @@
             </table>
 
             <div class="ticket-counter">
-                チケット合計枚数　<span class="ticket-count" id="ticketCount">0</span>　枚
+                <div class="ticket-counter-row">
+                    チケット大人　<span class="ticket-count" id="adultTicketCount">0</span>　枚
+                </div>
+                <div class="ticket-counter-row">
+                    チケット子ども　<span class="ticket-count" id="childTicketCount">0</span>　枚
+                </div>
             </div>
 
             <div class="comments-section">
@@ -445,6 +485,7 @@
                 button.textContent = '送信';
             }
         }
+        
         function showError(message) {
             const errorDiv = document.getElementById('errorMessage');
             errorDiv.textContent = message;
@@ -467,6 +508,29 @@
             });
         }
 
+        // 市外制限チェック機能
+        function checkCityRestriction() {
+            // 現在の日付を取得
+            const currentDate = new Date();
+            const restrictionEndDate = new Date('2025-12-01');
+            
+            // 2025年12月1日以降の場合は制限なし
+            if (currentDate >= restrictionEndDate) {
+                return false;
+            }
+            
+            for (let i = 1; i <= 5; i++) {
+                const name = document.querySelector(`input[name="name${i}"]`).value.trim();
+                const region = document.querySelector(`select[name="region${i}"]`).value;
+                
+                // 名前が入力されていて、「市外」が含まれる選択肢が選択されている場合
+                if (name && region && region.includes('市外')) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         function validateForm() {
             clearErrorStyles();
             hideError();
@@ -476,6 +540,12 @@
             
             let hasError = false;
             let errorMessage = '';
+            
+            // 市外制限チェック
+            if (checkCityRestriction()) {
+                showError('市外の方の申し込みは12月1日からの開始です。');
+                return false;
+            }
             
             // 1行目の氏名チェック
             if (!name1.value.trim()) {
@@ -523,20 +593,32 @@
                 });
             });
         }
+        
         function updateTicketCount() {
-            let count = 0;
+            let adultCount = 0;
+            let childCount = 0;
+            
             for (let i = 1; i <= 5; i++) {
                 const name = document.querySelector(`input[name="name${i}"]`).value.trim();
+                const age = document.querySelector(`select[name="age${i}"]`).value;
+                
                 if (name) {
-                    count++;
+                    if (age === '大人') {
+                        adultCount++;
+                    } else if (age === '子ども') {
+                        childCount++;
+                    }
                 }
             }
-            document.getElementById('ticketCount').textContent = count;
+            
+            document.getElementById('adultTicketCount').textContent = adultCount;
+            document.getElementById('childTicketCount').textContent = childCount;
         }
 
-        // 各名前欄の入力時にチケット数を更新
+        // 各名前欄と大人・子ども選択欄の入力時にチケット数を更新
         for (let i = 1; i <= 5; i++) {
             document.querySelector(`input[name="name${i}"]`).addEventListener('input', updateTicketCount);
+            document.querySelector(`select[name="age${i}"]`).addEventListener('change', updateTicketCount);
         }
 
         // フォーム送信処理
@@ -553,8 +635,7 @@
             // 送信開始状態に変更
             setButtonSending(submitButton, true);
         
-            // ★★★ reCAPTCHAの実行 ★★★
-            // 'YOUR_SITE_KEY'をあなたのサイトキーに置き換えてください
+            // reCAPTCHAの実行
             const siteKey = '6LfGurcrAAAAAD65v_jGJlOTlaTW2fgDO5te1vZk';
         
             grecaptcha.ready(function () {
@@ -570,6 +651,7 @@
                         if (name) { // 名前が入力されている行のみ送信
                             data.push({
                                 name: name,
+                                age: formData.get(`age${i}`) || '',
                                 type: formData.get(`type${i}`) || '',
                                 region: formData.get(`region${i}`) || '',
                                 email: formData.get(`email${i}`) || ''
@@ -577,14 +659,24 @@
                         }
                     }
         
+                    // 大人と子どもの数を計算
+                    let adultCount = 0;
+                    let childCount = 0;
+                    data.forEach(entry => {
+                        if (entry.age === '大人') adultCount++;
+                        else if (entry.age === '子ども') childCount++;
+                    });
+        
                     const submitData = {
                         entries: data,
                         comments: formData.get('comments') || '',
-                        ticketCount: data.length,
+                        adultTicketCount: adultCount,
+                        childTicketCount: childCount,
+                        totalTicketCount: data.length,
                         timestamp: new Date().toISOString()
                     };
         
-                    // ★★★ reCAPTCHAトークンを送信データに追加 ★★★
+                    // reCAPTCHAトークンを送信データに追加
                     submitData.recaptchaToken = token;
         
                     try {
@@ -593,18 +685,16 @@
         
                         const response = await fetch(GAS_URL, {
                             method: 'POST',
-                            // mode: 'no-cors', // ← 削除。GASからの応答を受け取るために必要
-                            // headers: { 'Content-Type': 'application/json' }, // ← 変更。GASとの通信でより確実な形式に
                             headers: {
                               'Content-Type': 'text/plain;charset=utf-8',
                             },
                             body: JSON.stringify(submitData)
                         });
         
-                        // ★★★ GASからの応答をJSONとして解釈 ★★★
+                        // GASからの応答をJSONとして解釈
                         const result = await response.json();
         
-                        // ★★★ GASからの結果に応じて処理を分岐 ★★★
+                        // GASからの結果に応じて処理を分岐
                         if (result.status === 'success') {
                             alert('送信完了しました。ありがとうございます。');
         
