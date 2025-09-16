@@ -114,26 +114,6 @@
             text-align: center;
         }
 
-        .ticket-counter-row {
-            margin-bottom: 10px;
-        }
-
-        .comments-section {
-            margin-bottom: 20px;
-        }
-
-        .comments-textarea {
-            width: 100%;
-            height: 80px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-family: inherit;
-            font-size: 14px;
-            resize: vertical;
-            box-sizing: border-box;
-        }
-
         .form-select.error {
             border: 2px solid #ff4444;
             background-color: #fff5f5;
@@ -184,6 +164,22 @@
             background: linear-gradient(135deg, #666666, #444444);
         }
 
+        .comments-section {
+            margin-bottom: 20px;
+        }
+
+        .comments-textarea {
+            width: 100%;
+            height: 80px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+
         @media (max-width: 768px) {
             body {
                 padding: 5px;
@@ -231,7 +227,7 @@
             }
             
             .ticket-counter {
-                font-size: 13px;
+                font-size: 14px;
                 text-align: center;
                 margin: 15px 0;
             }
@@ -453,12 +449,7 @@
             </table>
 
             <div class="ticket-counter">
-                <div class="ticket-counter-row">
-                    チケット大人　<span class="ticket-count" id="adultTicketCount">0</span>　枚
-                </div>
-                <div class="ticket-counter-row">
-                    チケット子ども　<span class="ticket-count" id="childTicketCount">0</span>　枚
-                </div>
+                合計チケット　<span class="ticket-count" id="totalTicketCount">0</span>　枚
             </div>
 
             <div class="comments-section">
@@ -658,24 +649,18 @@
         }
         
         function updateTicketCount() {
-            let adultCount = 0;
-            let childCount = 0;
+            let totalCount = 0;
             
             for (let i = 1; i <= 5; i++) {
                 const name = document.querySelector(`input[name="name${i}"]`).value.trim();
                 const age = document.querySelector(`select[name="age${i}"]`).value;
                 
-                if (name) {
-                    if (age === '大人') {
-                        adultCount++;
-                    } else if (age === '子ども') {
-                        childCount++;
-                    }
+                if (name && (age === '大人' || age === '子ども')) {
+                    totalCount++;
                 }
             }
             
-            document.getElementById('adultTicketCount').textContent = adultCount;
-            document.getElementById('childTicketCount').textContent = childCount;
+            document.getElementById('totalTicketCount').textContent = totalCount;
         }
 
         // 各名前欄と大人・子ども選択欄の入力時にチケット数を更新
