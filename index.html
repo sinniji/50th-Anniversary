@@ -134,7 +134,7 @@
             box-sizing: border-box;
         }
 
-        .form-input.error {
+        .form-select.error {
             border: 2px solid #ff4444;
             background-color: #fff5f5;
         }
@@ -295,7 +295,7 @@
                             </div>
                         </td>
                         <td>
-                            <select class="form-select" name="age1">
+                            <select class="form-select" name="age1" required>
                                 <option value="">選択してください</option>
                                 <option value="大人">大人</option>
                                 <option value="子ども">子ども</option>
@@ -317,7 +317,9 @@
                                 <option value="一般（市外）">一般（市外）</option>
                              </select>
                         </td>
-                        <td><input type="email" class="form-input" name="email1" placeholder="半角入力"></td>
+                        <td>
+                            <input type="email" class="form-input" name="email1" placeholder="半角入力" required>
+                        </td>
                     </tr>
                     <tr>
                         <td>
@@ -464,7 +466,7 @@
             </div>
 
             <div class="required-note">
-                *印欄の氏名・Mailは必須入力です。
+                *印欄の氏名・大人・子ども・Mailは必須入力です。
             </div>
 
             <input type="hidden" name="recaptchaToken" id="recaptcha-token">
@@ -501,8 +503,8 @@
         }
 
         function clearErrorStyles() {
-            // 全ての入力フィールドからエラースタイルを削除
-            const inputs = document.querySelectorAll('.form-input');
+            // 全ての入力フィールドとセレクトボックスからエラースタイルを削除
+            const inputs = document.querySelectorAll('.form-input, .form-select');
             inputs.forEach(input => {
                 input.classList.remove('error');
             });
@@ -537,6 +539,7 @@
             
             const name1 = document.querySelector('input[name="name1"]');
             const email1 = document.querySelector('input[name="email1"]');
+            const age1 = document.querySelector('select[name="age1"]');
             
             let hasError = false;
             let errorMessage = '';
@@ -552,6 +555,14 @@
                 name1.classList.add('error');
                 hasError = true;
                 errorMessage += '氏名';
+            }
+            
+            // 1行目の大人・子どもチェック
+            if (!age1.value) {
+                age1.classList.add('error');
+                hasError = true;
+                if (errorMessage) errorMessage += 'と大人・子ども';
+                else errorMessage += '大人・子ども';
             }
             
             // 1行目のメールチェック
@@ -581,12 +592,12 @@
 
         // フォーカス時にエラースタイルを削除
         function setupErrorClearOnFocus() {
-            const inputs = document.querySelectorAll('.form-input');
+            const inputs = document.querySelectorAll('.form-input, .form-select');
             inputs.forEach(input => {
                 input.addEventListener('focus', function() {
                     this.classList.remove('error');
                     // もし全てのエラーがクリアされたらエラーメッセージも非表示
-                    const errorInputs = document.querySelectorAll('.form-input.error');
+                    const errorInputs = document.querySelectorAll('.form-input.error, .form-select.error');
                     if (errorInputs.length === 0) {
                         hideError();
                     }
