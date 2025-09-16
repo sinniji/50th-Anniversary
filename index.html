@@ -466,7 +466,8 @@
             </div>
 
             <div class="required-note">
-                *印欄の氏名・大人・子ども・Mailは必須入力です。
+                *印欄の氏名・大人・子ども・Mailは必須入力です。<br>
+                名前を入力した行は、大人・子どもと所属地域の選択が必要です。
             </div>
 
             <input type="hidden" name="recaptchaToken" id="recaptcha-token">
@@ -544,6 +545,7 @@
             let hasError = false;
             let errorMessage = '';
             let missingAgeRows = [];
+            let missingRegionRows = [];
             
             // 市外制限チェック
             if (checkCityRestriction()) {
@@ -583,16 +585,36 @@
                 }
             }
             
-            // 2～5行目の氏名が入力されている場合の大人・子どもチェック
+            // 2～5行目の氏名が入力されている場合の大人・子どもと所属地域チェック
             for (let i = 2; i <= 5; i++) {
                 const name = document.querySelector(`input[name="name${i}"]`);
                 const age = document.querySelector(`select[name="age${i}"]`);
+                const region = document.querySelector(`select[name="region${i}"]`);
                 
-                if (name.value.trim() && !age.value) {
-                    age.classList.add('error');
-                    hasError = true;
-                    missingAgeRows.push(i);
+                if (name.value.trim()) {
+                    // 名前が入力されている場合、大人・子どもをチェック
+                    if (!age.value) {
+                        age.classList.add('error');
+                        hasError = true;
+                        missingAgeRows.push(i);
+                    }
+                    
+                    // 名前が入力されている場合、所属地域をチェック
+                    if (!region.value) {
+                        region.classList.add('error');
+                        hasError = true;
+                        missingRegionRows.push(i);
+                    }
                 }
+            }
+            
+            // 1行目の所属地域チェック（1行目は名前が必須なので、所属地域も必須にする）
+            const region1 = document.querySelector('select[name="region1"]');
+            if (name1.value.trim() && !region1.value) {
+                region1.classList.add('error');
+                hasError = true;
+                if (errorMessage) errorMessage += 'と所属地域';
+                else errorMessage += '所属地域';
             }
             
             // エラーメッセージの組み立て
@@ -606,6 +628,11 @@
                 if (missingAgeRows.length > 0) {
                     if (finalErrorMessage) finalErrorMessage += '\n';
                     finalErrorMessage += `${missingAgeRows.join('、')}行目の大人・子どもを選択してください。`;
+                }
+                
+                if (missingRegionRows.length > 0) {
+                    if (finalErrorMessage) finalErrorMessage += '\n';
+                    finalErrorMessage += `${missingRegionRows.join('、')}行目の所属地域を選択してください。`;
                 }
                 
                 showError(finalErrorMessage);
