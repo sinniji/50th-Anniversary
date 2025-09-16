@@ -543,6 +543,7 @@
             
             let hasError = false;
             let errorMessage = '';
+            let missingAgeRows = [];
             
             // 市外制限チェック
             if (checkCityRestriction()) {
@@ -582,8 +583,32 @@
                 }
             }
             
+            // 2～5行目の氏名が入力されている場合の大人・子どもチェック
+            for (let i = 2; i <= 5; i++) {
+                const name = document.querySelector(`input[name="name${i}"]`);
+                const age = document.querySelector(`select[name="age${i}"]`);
+                
+                if (name.value.trim() && !age.value) {
+                    age.classList.add('error');
+                    hasError = true;
+                    missingAgeRows.push(i);
+                }
+            }
+            
+            // エラーメッセージの組み立て
             if (hasError) {
-                showError(`必須入力欄（${errorMessage}）が空欄または不正です。`);
+                let finalErrorMessage = '';
+                
+                if (errorMessage) {
+                    finalErrorMessage += `必須入力欄（${errorMessage}）が空欄または不正です。`;
+                }
+                
+                if (missingAgeRows.length > 0) {
+                    if (finalErrorMessage) finalErrorMessage += '\n';
+                    finalErrorMessage += `${missingAgeRows.join('、')}行目の大人・子どもを選択してください。`;
+                }
+                
+                showError(finalErrorMessage);
                 return false;
             }
             
