@@ -758,7 +758,7 @@
         
                     } catch (error) {
                         console.error('Error:', error);
-                        alert('送信中にエラーが発生しました。もう一度お試しください。');
+                        alert(error.message || '送信中にエラーが発生しました。もう一度お試しください。');
                     } finally {
                         // 送信完了後、ボタンを元の状態に戻す
                         setButtonSending(submitButton, false);
